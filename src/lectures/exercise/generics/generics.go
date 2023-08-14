@@ -15,10 +15,17 @@
 
 package main
 
-import "fmt"
+import (
+	"constraints"
+	"fmt"
+)
 
 type Distance int32
 type Velocity float64
+
+type Number interface {
+	constraints.Float | constraints.Integer
+}
 
 // The `clamp` function returns a value that has been "clamped"
 // within a specific range of numbers. The `min` value is the
@@ -26,11 +33,17 @@ type Velocity float64
 // If the initial value lies within the range of `min` and `max`,
 // then it should be returned as-is.
 // Mathematically:
-//   min <= value <= max
-
-/*
-func clamp(value, min, max) clamped_value {}
-*/
+//
+//	min <= value <= max
+func clamp[T Number](value, min, max T) T {
+	if value > max {
+		return max
+	} else if value < min {
+		return min
+	} else {
+		return value
+	}
+}
 
 func testClampInt8() {
 	var (
